@@ -4,8 +4,8 @@ import android.os.Build
 import android.os.Bundle
 import android.view.View
 import android.widget.LinearLayout
+import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
-import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -25,6 +25,7 @@ class JokesListActivity : AppCompatActivity() {
     private var jokesAdapter: JokesAdapter? = null
     private val jokesArraylist = ArrayList<JokeClass>()
     private var layoutError: LinearLayout? = null
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_list)
@@ -59,27 +60,24 @@ class JokesListActivity : AppCompatActivity() {
     }
 
     private fun populateJokesList() {
-        jokesViewModel?.jokesResponseLiveData?.observe(
-            this,
-            Observer { jokesResponse: JokesResponse? ->
-
-                if (jokesResponse == null) {
-                    recyclerView?.visibility = View.GONE
-                    layoutError?.visibility = View.VISIBLE
-                } else if (jokesResponse.arrayListJokes != null) {
-                    jokesArraylist.addAll(jokesResponse.arrayListJokes!!)
-                    jokesAdapter?.notifyDataSetChanged()
-                }
-            })
-        jokesViewModel?.singleJokeResponseLiveData?.observe(this, Observer { joke: JokeClass? ->
+        jokesViewModel?.jokesResponseLiveData?.observe(this) { jokesResponse: JokesResponse? ->
+            if (jokesResponse == null) {
+                recyclerView?.visibility = View.GONE
+                layoutError?.visibility = View.VISIBLE
+            } else if (jokesResponse.arrayListJokes != null) {
+                jokesArraylist.addAll(jokesResponse.arrayListJokes!!)
+                jokesAdapter?.notifyDataSetChanged()
+            }
+        }
+        jokesViewModel?.singleJokeResponseLiveData?.observe(this){ joke: JokeClass? ->
             if (joke != null) {
                 jokesArraylist.add(joke)
-                jokesAdapter?.notifyDataSetChanged()
+                jokesAdapter?.notifyItemChanged(0)
             } else {
                 recyclerView?.visibility = View.GONE
                 layoutError?.visibility = View.VISIBLE
             }
-        })
+        }
     }
 
 }

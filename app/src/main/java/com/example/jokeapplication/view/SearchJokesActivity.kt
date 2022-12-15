@@ -20,7 +20,7 @@ class SearchJokesActivity : AppCompatActivity() {
     private var rbAny: RadioButton? = null
     private var checkboxSingle: CheckBox? = null
     private var checkboxTwopart: CheckBox? = null
-    var selectedCatergories: MutableList<String>? = null
+    private var selectedCatergories: MutableList<String>? = null
     private var spinnerAmount: Spinner? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -63,12 +63,9 @@ class SearchJokesActivity : AppCompatActivity() {
         rbCustom?.setOnClickListener {
             val builder = AlertDialog.Builder(this@SearchJokesActivity)
             builder.setTitle("Choose Category")
-            builder.setMultiChoiceItems(
-                categoryStrArray,
-                checkedItems,
-                OnMultiChoiceClickListener { _: DialogInterface?, which: Int, isChecked: Boolean ->
-                    checkedItems[which] = isChecked
-                })
+            builder.setMultiChoiceItems(categoryStrArray, checkedItems) { _: DialogInterface?, which: Int, isChecked: Boolean ->
+                checkedItems[which] = isChecked
+            }
             builder.setCancelable(false)
             builder.setPositiveButton("Done") { _: DialogInterface?, _: Int ->
                 selectedCatergories?.clear()
