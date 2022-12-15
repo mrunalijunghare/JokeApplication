@@ -32,8 +32,8 @@ class JokesViewModel(application: Application) : AndroidViewModel(application) {
 
     private fun requestSearchJokesList() {
         var amount = 0
-        if (jokesRequest?.amount != null && !jokesRequest?.amount!!.isEmpty())
-            amount = jokesRequest?.amount!!.toInt()
+        if (jokesRequest?.amount != null && jokesRequest?.amount!!.isNotEmpty())
+            amount = jokesRequest?.amount?.toInt()!!
         if (amount > 1) {
             jokesResponseLiveData = jokesRepository.getJokesList(
             jokesRequest?.category,

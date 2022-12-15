@@ -19,7 +19,7 @@ class JokesRepository {
         amount: String?
     ): LiveData<JokesResponse?> {
         val data = MutableLiveData<JokesResponse?>()
-        jokesApi?.getJokes(category, jokeType, amount)!!.enqueue(object : Callback<JokesResponse?> {
+        jokesApi?.getJokes(category, jokeType, amount)?.enqueue(object : Callback<JokesResponse?> {
             override fun onResponse(
                 call: Call<JokesResponse?>,
                 response: Response<JokesResponse?>
@@ -42,7 +42,7 @@ class JokesRepository {
         amount: String?
     ): LiveData<JokeClass?> {
         val data = MutableLiveData<JokeClass?>()
-        jokesApi?.getSingleJoke(category, jokeType, amount)!!.enqueue(object : Callback<JokeClass?> {
+        jokesApi?.getSingleJoke(category, jokeType, amount)?.enqueue(object : Callback<JokeClass?> {
             override fun onResponse(call: Call<JokeClass?>, response: Response<JokeClass?>) {
                 if (response.body() != null) {
                     data.value = response.body()

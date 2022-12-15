@@ -49,18 +49,18 @@ class SearchJokesActivity : AppCompatActivity() {
         val amountSpinnerAdapter =
             ArrayAdapter(this, android.R.layout.simple_spinner_item, arrayAmounts)
         amountSpinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
-        spinnerAmount!!.adapter = amountSpinnerAdapter
+        spinnerAmount?.adapter = amountSpinnerAdapter
     }
 
     private fun setCustomCategoryDialog() {
         val checkedItems = BooleanArray(categoryStrArray.size)
         selectedCatergories = ArrayList<String>(categoryStrArray.size)
 
-        rbAny!!.setOnClickListener{
-            selectedCatergories!!.clear()
+        rbAny?.setOnClickListener{
+            selectedCatergories?.clear()
         }
 
-        rbCustom!!.setOnClickListener {
+        rbCustom?.setOnClickListener {
             val builder = AlertDialog.Builder(this@SearchJokesActivity)
             builder.setTitle("Choose Category")
             builder.setMultiChoiceItems(
@@ -71,25 +71,25 @@ class SearchJokesActivity : AppCompatActivity() {
                 })
             builder.setCancelable(false)
             builder.setPositiveButton("Done") { _: DialogInterface?, _: Int ->
-                selectedCatergories!!.clear()
+                selectedCatergories?.clear()
                 for ((i, isChecked) in checkedItems.withIndex()) {
-                    if (isChecked) selectedCatergories!!.add(categoryStrArray[i])
+                    if (isChecked) selectedCatergories?.add(categoryStrArray[i])
                 }
-                if (selectedCatergories!!.isEmpty()) {
-                    rbAny!!.isChecked = true
+                if (selectedCatergories?.size==0) {
+                    rbAny?.isChecked = true
                     Arrays.fill(checkedItems, false)
                 }
             }
             builder.setNegativeButton("CANCEL") { _: DialogInterface?, _: Int ->
-                if (selectedCatergories!!.isEmpty()) {
-                    rbAny!!.isChecked = true
+                if (selectedCatergories?.size ==0) {
+                    rbAny?.isChecked = true
                     Arrays.fill(checkedItems, false)
                 } else {
                     for (i in categoryStrArray.indices) {
-                        if (!selectedCatergories!!.contains(categoryStrArray[i]) && checkedItems[i]) {
+                        if (!(selectedCatergories?.contains(categoryStrArray[i]))!! && checkedItems[i]) {
                             checkedItems[i] = false
                         }
-                        if (selectedCatergories!!.contains(categoryStrArray[i]) && !checkedItems[i]) {
+                        if (selectedCatergories?.contains(categoryStrArray[i])!! && !checkedItems[i]) {
                             checkedItems[i] = true
                         }
                     }
@@ -97,8 +97,8 @@ class SearchJokesActivity : AppCompatActivity() {
             }
             builder.setNeutralButton("CLEAR ALL") { _: DialogInterface?, _: Int ->
                 Arrays.fill(checkedItems, false)
-                selectedCatergories!!.clear()
-                rbAny!!.isChecked = true
+                selectedCatergories?.clear()
+                rbAny?.isChecked = true
             }
             builder.create()
             val customCategoryDialog = builder.create()
@@ -118,7 +118,7 @@ class SearchJokesActivity : AppCompatActivity() {
     private fun getJokeRequestData(): JokesRequest {
         val jokesRequest = JokesRequest()
 
-        if (selectedCatergories != null && selectedCatergories!!.size > 0) {
+        if (selectedCatergories != null && selectedCatergories?.size!! > 0) {
             jokesRequest.category = java.lang.String.join(",", selectedCatergories)
         }
         if (!(checkboxSingle!!.isChecked && checkboxTwopart!!.isChecked)) {
@@ -127,9 +127,9 @@ class SearchJokesActivity : AppCompatActivity() {
             if (checkboxTwopart!!.isChecked)
                 jokesRequest.jokeType = resources.getString(R.string.twopart)
         }
-        if (spinnerAmount!!.selectedItem != null
-            && spinnerAmount!!.selectedItem.toString().toInt() > 1)
-                jokesRequest.amount = spinnerAmount!!.selectedItem.toString()
+        if (spinnerAmount?.selectedItem != null
+            && spinnerAmount?.selectedItem.toString().toInt() > 1)
+                jokesRequest.amount = spinnerAmount?.selectedItem.toString()
         return jokesRequest
     }
 
