@@ -1,8 +1,6 @@
 package com.example.jokeapplication.model
 
 import com.google.gson.annotations.SerializedName
-import com.example.jokeapplication.model.JokeClass
-import java.util.ArrayList
 
 class JokesResponse {
     @SerializedName("error")

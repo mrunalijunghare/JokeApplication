@@ -56,48 +56,46 @@ class SearchJokesActivity : AppCompatActivity() {
         val checkedItems = BooleanArray(categoryStrArray.size)
         selectedCatergories = ArrayList<String>(categoryStrArray.size)
 
-        rbAny!!.setOnClickListener{ v: View? ->
+        rbAny!!.setOnClickListener{
             selectedCatergories!!.clear()
         }
 
-        rbCustom!!.setOnClickListener { v: View? ->
+        rbCustom!!.setOnClickListener {
             val builder = AlertDialog.Builder(this@SearchJokesActivity)
             builder.setTitle("Choose Category")
             builder.setMultiChoiceItems(
                 categoryStrArray,
                 checkedItems,
-                OnMultiChoiceClickListener { dialog: DialogInterface?, which: Int, isChecked: Boolean ->
+                OnMultiChoiceClickListener { _: DialogInterface?, which: Int, isChecked: Boolean ->
                     checkedItems[which] = isChecked
                 })
             builder.setCancelable(false)
-            builder.setPositiveButton("Done") { dialog: DialogInterface?, which: Int ->
+            builder.setPositiveButton("Done") { _: DialogInterface?, _: Int ->
                 selectedCatergories!!.clear()
-                var i = 0
-                for (isChecked in checkedItems) {
-                    if (isChecked) selectedCatergories!!.add(categoryStrArray.get(i))
-                    i++
+                for ((i, isChecked) in checkedItems.withIndex()) {
+                    if (isChecked) selectedCatergories!!.add(categoryStrArray[i])
                 }
                 if (selectedCatergories!!.isEmpty()) {
                     rbAny!!.isChecked = true
                     Arrays.fill(checkedItems, false)
                 }
             }
-            builder.setNegativeButton("CANCEL") { dialog: DialogInterface?, which: Int ->
+            builder.setNegativeButton("CANCEL") { _: DialogInterface?, _: Int ->
                 if (selectedCatergories!!.isEmpty()) {
                     rbAny!!.isChecked = true
                     Arrays.fill(checkedItems, false)
                 } else {
                     for (i in categoryStrArray.indices) {
-                        if (!selectedCatergories!!.contains(categoryStrArray.get(i)) && checkedItems[i]) {
+                        if (!selectedCatergories!!.contains(categoryStrArray[i]) && checkedItems[i]) {
                             checkedItems[i] = false
                         }
-                        if (selectedCatergories!!.contains(categoryStrArray.get(i)) && !checkedItems[i]) {
+                        if (selectedCatergories!!.contains(categoryStrArray[i]) && !checkedItems[i]) {
                             checkedItems[i] = true
                         }
                     }
                 }
             }
-            builder.setNeutralButton("CLEAR ALL") { dialog: DialogInterface?, which: Int ->
+            builder.setNeutralButton("CLEAR ALL") { _: DialogInterface?, _: Int ->
                 Arrays.fill(checkedItems, false)
                 selectedCatergories!!.clear()
                 rbAny!!.isChecked = true

@@ -9,7 +9,7 @@ import com.example.jokeapplication.R
 import android.widget.TextView
 import java.util.ArrayList
 
-class JokesAdapter(val jokesArrayList: ArrayList<JokeClass>) :
+class JokesAdapter(private val jokesArrayList: ArrayList<JokeClass>) :
     RecyclerView.Adapter<JokesAdapter.ViewHolder>() {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val view = LayoutInflater.from(parent.context).inflate(R.layout.list_item, parent, false)

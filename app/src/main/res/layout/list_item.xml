@@ -19,8 +19,8 @@
             android:textColor="@android:color/white"
             android:textSize="@dimen/text_size_16sp"
             android:layout_marginTop="@dimen/margin_1"
-             android:visibility="gone"
+            android:visibility="gone"
             android:layout_below="@id/tvJoke"
-             android:textStyle="normal" />
+            android:textStyle="normal" />
 
 </RelativeLayout>

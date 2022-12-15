@@ -6,7 +6,7 @@ import android.view.View
 import android.widget.LinearLayout
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProviders
+import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -20,7 +20,7 @@ import com.example.jokeapplication.model.Util.KEY_JOKE_REQUEST
 import com.example.jokeapplication.viewmodel.JokesViewModel
 
 class JokesListActivity : AppCompatActivity() {
-    var jokesViewModel: JokesViewModel? = null
+    private var jokesViewModel: JokesViewModel? = null
     private var recyclerView: RecyclerView? = null
     private var jokesAdapter: JokesAdapter? = null
     private val jokesArraylist = ArrayList<JokeClass>()
@@ -29,24 +29,24 @@ class JokesListActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_list)
         init()
-        populateJokesList();
+        populateJokesList()
     }
 
     private fun init() {
-        jokesViewModel = ViewModelProviders.of(this).get(JokesViewModel::class.java)
+        jokesViewModel = ViewModelProvider.AndroidViewModelFactory.getInstance(application).create(JokesViewModel::class.java)
         setDataFromIntent()
         layoutError = findViewById(R.id.layoutError)
         val layoutManager = LinearLayoutManager(this)
         recyclerView = findViewById(R.id.recyclerView)
         recyclerView?.addItemDecoration(DividerItemDecoration(this, DividerItemDecoration.VERTICAL))
-        recyclerView?.setLayoutManager(layoutManager)
+        recyclerView?.layoutManager = layoutManager
         jokesAdapter = JokesAdapter(jokesArraylist)
-        recyclerView?.setAdapter(jokesAdapter)
+        recyclerView?.adapter = jokesAdapter
         makeRequestForJokesList()
     }
 
     private fun makeRequestForJokesList() {
-        jokesViewModel!!.handleEvents(Event.SEARCH)
+        jokesViewModel?.handleEvents(Event.SEARCH)
     }
 
     private fun setDataFromIntent() {
@@ -55,28 +55,29 @@ class JokesListActivity : AppCompatActivity() {
         } else {
             intent.getSerializableExtra(KEY_JOKE_REQUEST) as JokesRequest
         }
-        if (jokesRequest != null) jokesViewModel!!.setJokesRequest(jokesRequest)
+        if (jokesRequest != null) jokesViewModel?.setJokesRequest(jokesRequest)
     }
 
     private fun populateJokesList() {
-        jokesViewModel!!.jokesResponseLiveData.observe(
+        jokesViewModel?.jokesResponseLiveData?.observe(
             this,
             Observer { jokesResponse: JokesResponse? ->
-                if (jokesResponse != null && jokesResponse.arrayListJokes != null) {
+
+                if (jokesResponse == null) {
+                    recyclerView?.visibility = View.GONE
+                    layoutError?.visibility = View.VISIBLE
+                } else if (jokesResponse.arrayListJokes != null) {
                     jokesArraylist.addAll(jokesResponse.arrayListJokes!!)
-                    jokesAdapter!!.notifyDataSetChanged()
-                } else {
-                    recyclerView!!.visibility = View.GONE
-                    layoutError!!.visibility = View.VISIBLE
+                    jokesAdapter?.notifyDataSetChanged()
                 }
             })
-        jokesViewModel!!.singleJokeResponseLiveData.observe(this, Observer { joke: JokeClass? ->
+        jokesViewModel?.singleJokeResponseLiveData?.observe(this, Observer { joke: JokeClass? ->
             if (joke != null) {
                 jokesArraylist.add(joke)
-                jokesAdapter!!.notifyDataSetChanged()
+                jokesAdapter?.notifyDataSetChanged()
             } else {
-                recyclerView!!.visibility = View.GONE
-                layoutError!!.visibility = View.VISIBLE
+                recyclerView?.visibility = View.GONE
+                layoutError?.visibility = View.VISIBLE
             }
         })
     }

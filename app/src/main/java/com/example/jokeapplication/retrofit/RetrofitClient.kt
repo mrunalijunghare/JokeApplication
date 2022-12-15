@@ -1,7 +1,6 @@
 package com.example.jokeapplication.retrofit
 
 import retrofit2.Retrofit
-import com.example.jokeapplication.retrofit.RetrofitClient
 import retrofit2.converter.gson.GsonConverterFactory
 
 object RetrofitClient {

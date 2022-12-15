@@ -20,8 +20,7 @@
         android:weightSum="10"
         android:orientation="horizontal"
         android:layout_alignParentTop="true"
-        android:baselineAligned="false"
-        >
+        android:baselineAligned="false">
         <RelativeLayout
             android:layout_weight="3"
             android:layout_width="0dp"
@@ -58,12 +57,12 @@
 
         </LinearLayout>
     </LinearLayout>
-<View
-    android:id="@+id/line1"
-    android:layout_width="match_parent"
-    android:background="#25221e"
-    android:layout_below="@+id/layoutCategory"
-    android:layout_height="@dimen/margin_1"/>
+    <View
+        android:id="@+id/line1"
+        android:layout_width="match_parent"
+        android:background="#25221e"
+        android:layout_below="@+id/layoutCategory"
+        android:layout_height="@dimen/margin_1"/>
         <LinearLayout
             android:id="@+id/layoutJokeType"
             android:weightSum="10"

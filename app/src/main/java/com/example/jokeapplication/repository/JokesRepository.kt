@@ -1,12 +1,11 @@
 package com.example.jokeapplication.repository
 
-import android.util.Log
-import com.example.jokeapplication.network.JokesApi
-import com.example.jokeapplication.retrofit.RetrofitClient
 import androidx.lifecycle.LiveData
-import com.example.jokeapplication.model.JokesResponse
 import androidx.lifecycle.MutableLiveData
 import com.example.jokeapplication.model.JokeClass
+import com.example.jokeapplication.model.JokesResponse
+import com.example.jokeapplication.network.JokesApi
+import com.example.jokeapplication.retrofit.RetrofitClient
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -27,15 +26,12 @@ class JokesRepository {
             ) {
                 if (response.body() != null) {
                     data.value = response.body()
-                    Log.d(TAG, "jokes response: $response")
-                    Log.d(TAG, "jokes response: " + response.body().toString())
                 }
             }
 
             override fun onFailure(call: Call<JokesResponse?>, t: Throwable) {
                 data.value = null
-                Log.d(TAG, " jokes response: null")
-            }
+             }
         })
         return data
     }
@@ -50,20 +46,14 @@ class JokesRepository {
             override fun onResponse(call: Call<JokeClass?>, response: Response<JokeClass?>) {
                 if (response.body() != null) {
                     data.value = response.body()
-                    Log.d(TAG, "joke response: $response")
-                    Log.d(TAG, "joke response body: " + response.body().toString())
                 }
             }
 
             override fun onFailure(call: Call<JokeClass?>, t: Throwable) {
                 data.value = null
-                Log.d(TAG, " jokes response: null")
             }
         })
         return data
     }
 
-    companion object {
-        private val TAG = JokesRepository::class.java.simpleName
-    }
 }

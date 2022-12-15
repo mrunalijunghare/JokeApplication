@@ -1,6 +1,5 @@
 package com.example.jokeapplication.model
 
-import com.example.jokeapplication.model.Flags
 import com.google.gson.annotations.SerializedName
 
 class JokeClass {
