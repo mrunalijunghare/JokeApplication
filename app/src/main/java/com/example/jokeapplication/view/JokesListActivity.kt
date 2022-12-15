@@ -1,0 +1,84 @@
+package com.example.jokeapplication.view
+
+import android.os.Build
+import android.os.Bundle
+import android.view.View
+import android.widget.LinearLayout
+import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProviders
+import androidx.recyclerview.widget.DividerItemDecoration
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
+import com.example.jokeapplication.R
+import com.example.jokeapplication.adapter.JokesAdapter
+import com.example.jokeapplication.model.Event
+import com.example.jokeapplication.model.JokeClass
+import com.example.jokeapplication.model.JokesRequest
+import com.example.jokeapplication.model.JokesResponse
+import com.example.jokeapplication.model.Util.KEY_JOKE_REQUEST
+import com.example.jokeapplication.viewmodel.JokesViewModel
+
+class JokesListActivity : AppCompatActivity() {
+    var jokesViewModel: JokesViewModel? = null
+    private var recyclerView: RecyclerView? = null
+    private var jokesAdapter: JokesAdapter? = null
+    private val jokesArraylist = ArrayList<JokeClass>()
+    private var layoutError: LinearLayout? = null
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setContentView(R.layout.activity_list)
+        init()
+        populateJokesList();
+    }
+
+    private fun init() {
+        jokesViewModel = ViewModelProviders.of(this).get(JokesViewModel::class.java)
+        setDataFromIntent()
+        layoutError = findViewById(R.id.layoutError)
+        val layoutManager = LinearLayoutManager(this)
+        recyclerView = findViewById(R.id.recyclerView)
+        recyclerView?.addItemDecoration(DividerItemDecoration(this, DividerItemDecoration.VERTICAL))
+        recyclerView?.setLayoutManager(layoutManager)
+        jokesAdapter = JokesAdapter(jokesArraylist)
+        recyclerView?.setAdapter(jokesAdapter)
+        makeRequestForJokesList()
+    }
+
+    private fun makeRequestForJokesList() {
+        jokesViewModel!!.handleEvents(Event.SEARCH)
+    }
+
+    private fun setDataFromIntent() {
+        val jokesRequest = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            intent.getSerializableExtra(KEY_JOKE_REQUEST, JokesRequest::class.java)
+        } else {
+            intent.getSerializableExtra(KEY_JOKE_REQUEST) as JokesRequest
+        }
+        if (jokesRequest != null) jokesViewModel!!.setJokesRequest(jokesRequest)
+    }
+
+    private fun populateJokesList() {
+        jokesViewModel!!.jokesResponseLiveData.observe(
+            this,
+            Observer { jokesResponse: JokesResponse? ->
+                if (jokesResponse != null && jokesResponse.arrayListJokes != null) {
+                    jokesArraylist.addAll(jokesResponse.arrayListJokes!!)
+                    jokesAdapter!!.notifyDataSetChanged()
+                } else {
+                    recyclerView!!.visibility = View.GONE
+                    layoutError!!.visibility = View.VISIBLE
+                }
+            })
+        jokesViewModel!!.singleJokeResponseLiveData.observe(this, Observer { joke: JokeClass? ->
+            if (joke != null) {
+                jokesArraylist.add(joke)
+                jokesAdapter!!.notifyDataSetChanged()
+            } else {
+                recyclerView!!.visibility = View.GONE
+                layoutError!!.visibility = View.VISIBLE
+            }
+        })
+    }
+
+}
