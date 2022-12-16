@@ -4,7 +4,6 @@ import android.os.Build
 import android.os.Bundle
 import android.view.View
 import android.widget.LinearLayout
-import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.DividerItemDecoration
