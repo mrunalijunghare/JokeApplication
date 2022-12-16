@@ -18,7 +18,7 @@
             android:layout_height="wrap_content"
             android:textColor="@android:color/white"
             android:textSize="@dimen/text_size_16sp"
-            android:layout_marginTop="@dimen/margin_1"
+            android:layout_marginTop="@dimen/margin_2"
             android:visibility="gone"
             android:layout_below="@id/tvJoke"
             android:textStyle="normal" />
